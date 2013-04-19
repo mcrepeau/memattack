@@ -1,4 +1,4 @@
-function Ps=binary_attack_1V(N,n,M)
+function Ps=binary_attack_form_1V(N,n,M)
 
 if nargin > 3
     error('Too many input arguments');
