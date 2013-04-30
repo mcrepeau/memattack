@@ -1,6 +1,6 @@
-function [Pss, Psf] = simulation_batch(K,iterations)
+function [Pss, Psf] = simulation_batch(K,attack,iterations)
 
-M = [0 5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95 100 105 110 115 120 125 130 135];
+M = [0:5:135];
 n = [10 25 50 75 100];
 N = 1000;
 
@@ -15,12 +15,18 @@ for i = 1:length(M)
         
         for k = 1:iterations
             memory = init_memoryspace(N,n(j),K);
-            %success = success + binary_attack_sim(M(i),memory);
-            %success = success + delta_attack_sim(M(i), memory, s);
-            success = success + delta_attack_sim2(M(i), memory);
+            switch attack
+                case 1
+                    success = success + binary_attack_sim(M(i),memory);
+                case 2
+                    success = success + delta_attack_sim2(M(i),memory);
+                case 3
+                    success = success + uniform_attack_sim(M(i),memory);
+                otherwise
+            end
         end;
         
-        Pss(j,i)=success/iterations;
+        Pss(j,i)=1-(success/iterations);
         fprintf('Test with n = %d and M = %d\n', n(j), M(i));
     end;
     
