@@ -1,6 +1,6 @@
-function [Pss, Psf] = simulation_batch(K,attack,iterations)
+function [Pss, Psf] = simulation_batch(K,attack,iterations,overlapping)
 
-M = [0:5:135];
+M = [0:5:500];
 n = [10 25 50 75 100];
 N = 1000;
 
@@ -14,7 +14,11 @@ for i = 1:length(M)
         success = 0;
         
         for k = 1:iterations
-            memory = init_memoryspace(N,n(j),K);
+            if (overlapping == 1)
+                memory = init_memoryspace(N,n(j),K);
+            elseif (overlapping == 0)
+                memory = init_memoryspace_nonoverlapping(N,n(j),K);
+            end
             switch attack
                 case 1
                     success = success + binary_attack_sim(M(i),memory);
